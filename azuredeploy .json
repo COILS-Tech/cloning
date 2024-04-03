@@ -10,18 +10,26 @@
             "type": "string",
             "defaultValue": "name of virtual network"
         },
-        "storageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Enter the name of your storage account here"
-            }
-        },
         "publicIpAddress": {
             "type": "string",
             "metadata": {
                 "description": "Enter Public IP Address name"
             }
-        }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Enter the name of your storage account here"
+            }
+        } ,
+        "nameofnetworkinterface": {
+            "type": "string",
+            "metadata": {
+                "description": "enter the name of networkinterface here"
+            }
+        
+    }
+
     },
     "functions": [],
     "variables": {},
@@ -138,7 +146,7 @@
             }
         },
         {
-            "name": "ubuntuVM1",
+            "name": "(enter the name of the virtual machine here)",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "location": "[resourceGroup().location]",
@@ -204,6 +212,56 @@
                             "access": "Allow",
                             "priority": 100,
                             "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[parameters ('nameofnetworkinterface')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[parameters('nameofnetworkinterface')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'virtualNetwork1')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'virtualNetwork1', 'subnet1')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "(name networkinterface)",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": " name networkinterface)"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'virtualNetwork1')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'virtualNetwork1', 'subnet1')]"
+                            }
                         }
                     }
                 ]
